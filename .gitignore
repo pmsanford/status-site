@@ -3,3 +3,4 @@ venv/
 *.sock
 status_uwsgi.ini
 config.py
+*.pyc

@@ -1,3 +1,35 @@
-.hi {
-	color: #00f;
+[class*="col-"] {
+	padding-top: 15px;
+	padding-bottom: 15px;
+	border: 1px solid #ddd;
+}
+
+.inner-row [class*="col-"] {
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.page-container .outer-row {
+	background-color: #eee;
+}
+
+.page-container .outer-row:nth-child(2n+4) {
+	background-color: #ccc;
+}
+
+.inner-row [class*="col-"]:first-of-type {
+	border: none;
+}
+
+.inner-row {
+	background-color: #eff;
+	display: none;
+}
+
+.inner-row:nth-child(2n+4) {
+	background-color: #cdd;
+}
+
+.header [class*="col-"] {
+	background-color: #fff; 
 }

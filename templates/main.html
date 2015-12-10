@@ -1,4 +1,30 @@
 {% extends "index.html" %}
-{% block body %}
-	<div class="hi">Hello, world!</div>
+{% block main_body %}
+	<div class="page-header">
+		<h1>Server Status</h1>
+	</div>
+	<div class="row header">
+		<div class="col-md-4">Server</div>
+		<div class="col-md-4">Web Address</div>
+		<div class="col-md-4">Internal IP Address</div>
+	</div>
+	{% for server in servers %}
+		<div class="row outer-row" data-rowid="{{ server.name }}" data-loaded="false">
+		<div class="col-md-4">{{ server.name }}</div>
+		<div class="col-md-4">{{ server.url }}</div>
+		<div class="col-md-4">{{ server.address }}</div>
+		</div>
+	{% endfor %}
+
+{% endblock %}
+
+{% block body_scripts %}
+    	<script type="text/javascript">
+    		$(document).ready(function() {
+    			$(".container").on("click", ".outer-row", function(e) {
+    				var rowid = $(this).data("rowid");
+    				$(".inner-row[data-parentrow='" + rowid + "']").toggle();
+    			});
+    		});
+    	</script>
 {% endblock %}
