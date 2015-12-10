@@ -59,9 +59,13 @@
 				var template = $('#detail-template').html();
 				Mustache.parse(template);
 				$.each(data, function(idx, val) {
-					var rendered = Mustache.render(template, {parentid: rowid, statname: val['name'], statval: val['value']});
+					var rendered = render_template(template, rowid, val);
 					row.after(rendered);
 				});
+    		}
+
+    		function render_template(template, parent, stat) {
+    			return Mustache.render(template, {parentid: parent, statname: stat['name'], statval: stat['value']});
     		}
 
     		function clear_child_rows(rowid) {
