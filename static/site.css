@@ -23,7 +23,6 @@
 
 .inner-row {
 	background-color: #eff;
-	display: none;
 }
 
 .inner-row:nth-child(2n+4) {
@@ -32,4 +31,8 @@
 
 .header [class*="col-"] {
 	background-color: #fff; 
+}
+
+.processing-row {
+	background-color: #eff;
 }

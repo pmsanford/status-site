@@ -9,7 +9,7 @@
 		<div class="col-md-4">Internal IP Address</div>
 	</div>
 	{% for server in servers %}
-		<div class="row outer-row" data-rowid="{{ server.name }}" data-loaded="false">
+		<div class="row outer-row" data-rowid="{{ server.name }}" data-state="unloaded">
 		<div class="col-md-4">{{ server.name }}</div>
 		<div class="col-md-4">{{ server.url }}</div>
 		<div class="col-md-4">{{ server.address }}</div>
@@ -19,11 +19,44 @@
 {% endblock %}
 
 {% block body_scripts %}
+		{% raw %}
+		<script id="detail-template" type="text/html">
+			<div class="row inner-row" data-parentrow="{{ parentid }}">
+				<div class="col-md-1">&nbsp;</div>
+				<div class="col-md-3">{{ statname }}</div>
+				<div class="col-md-8">{{ statval }}</div>
+			</div>
+		</script>
+		<script id="processing-template" type="text/html">
+			<div class="row inner-row processing-row" data-parentrow="{{ parentid }}">
+				<div class="col-md-1">&nbsp;</div>
+				<div class="col-md-11">Retrieving...</div>
+			</div>
+		</script>
+		{% endraw %}
     	<script type="text/javascript">
     		$(document).ready(function() {
     			$(".container").on("click", ".outer-row", function(e) {
-    				var rowid = $(this).data("rowid");
-    				$(".inner-row[data-parentrow='" + rowid + "']").toggle();
+	    			var rowid = $(this).data("rowid");
+
+    				if ($(this).data('state') === 'unloaded') {
+	    				$(this).data('state', 'processing');
+	    				var proc_template = $('#processing-template').html();
+	    				Mustache.parse(proc_template);
+	    				var rendered_proc = Mustache.render(proc_template, {parentid: rowid});
+	    				$(this).after(rendered_proc);
+	    				return;
+    				}
+
+    				if ($(this).data('state') == 'processing') {
+    					$(this).data('state', 'loaded');
+    					$('.processing-row[data-parentrow="' + rowid + '"]').remove();
+	    				var template = $('#detail-template').html();
+	    				Mustache.parse(template);
+	    				var rendered = Mustache.render(template, {parentid: rowid, statname: 'Stat Name', statval: 'Stat Val'});
+	    				$(this).after(rendered);
+	    				$(".inner-row[data-parentrow='" + rowid + "']").show();
+    				}
     			});
     		});
     	</script>
