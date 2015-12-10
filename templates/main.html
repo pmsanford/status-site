@@ -45,19 +45,27 @@
 	    				Mustache.parse(proc_template);
 	    				var rendered_proc = Mustache.render(proc_template, {parentid: rowid});
 	    				$(this).after(rendered_proc);
+	    				$.getJSON("stats/" + rowid, display_server_stats.bind(this))
 	    				return;
-    				}
-
-    				if ($(this).data('state') == 'processing') {
-    					$(this).data('state', 'loaded');
-    					$('.processing-row[data-parentrow="' + rowid + '"]').remove();
-	    				var template = $('#detail-template').html();
-	    				Mustache.parse(template);
-	    				var rendered = Mustache.render(template, {parentid: rowid, statname: 'Stat Name', statval: 'Stat Val'});
-	    				$(this).after(rendered);
-	    				$(".inner-row[data-parentrow='" + rowid + "']").show();
     				}
     			});
     		});
+
+    		function display_server_stats(data) {
+    			var row = $(this);
+				var rowid = row.data("rowid");
+				row.data('state', 'loaded');
+				clear_child_rows(rowid);
+				var template = $('#detail-template').html();
+				Mustache.parse(template);
+				$.each(data, function(idx, val) {
+					var rendered = Mustache.render(template, {parentid: rowid, statname: val['name'], statval: val['value']});
+					row.after(rendered);
+				});
+    		}
+
+    		function clear_child_rows(rowid) {
+    			$('.inner-row[data-parentrow="' + rowid + '"]').remove();
+    		}
     	</script>
 {% endblock %}
